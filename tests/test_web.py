@@ -1,12 +1,10 @@
 import pytest
 
 
-@pytest.mark.smoke
-def test_google(page):
-    page.goto("https://www.google.com")
-    assert "Google" in page.title()
-
-
-def test_bing(page):
-    page.goto("https://www.bing.com")
-    assert "Search - Microsoft Bing" in page.title()
+@pytest.mark.parametrize("url, title", [
+    ("https://www.google.com", "Google"),
+    ("https://www.bing.com", "Search - Microsoft Bing")
+])
+def test_search_engines(page, url, title):
+    page.goto(url)
+    assert title in page.title()

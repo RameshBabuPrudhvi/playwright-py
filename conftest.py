@@ -9,7 +9,7 @@ from utils.qtest_reporter import QTestReporter
 
 # Get the absolute path of the project root
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))  # Gets current directory
-REPORTS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "..", "reports"))  # Store outside 'tests'
+REPORTS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "reports"))  # Store outside 'tests'
 
 # Ensure necessary directories exist
 os.makedirs(f"{REPORTS_DIR}/videos", exist_ok=True)
@@ -42,20 +42,15 @@ def page(browser, request):
     os.makedirs(video_path, exist_ok=True)
 
     context = browser.new_context(
-        record_video_dir=video_path if request.config.getoption("--video-on") else None,
-        record_video_size={"width": 1280, "height": 720} if request.config.getoption("--video-on") else None
+        record_video_dir=video_path,
+        record_video_size={"width": 1280, "height": 720}
     )
 
     page = context.new_page()
     yield page
 
-    screenshot_option = request.config.getoption("--screenshot")
     screenshot_path = os.path.join(REPORTS_DIR, "screenshots", f"{page.title()}.png")
-
-    if screenshot_option == 'on':
-        page.screenshot(path=screenshot_path)
-    elif screenshot_option == 'only-on-failure' and request.node.rep_call.failed:
-        page.screenshot(path=screenshot_path)
+    page.screenshot(path=screenshot_path)
 
     page.close()
     context.close()
@@ -83,7 +78,7 @@ def pytest_runtest_teardown(item):
     }
     status = status_mapping.get(test_outcome, "SKIP")
 
-    html_file_path = "../reports/sample_report.html"
+    html_file_path = "../reports/TestReport.html"
     base_url = "https://apitryout.qtestnet.com/api/v3"
     project_id = "101762"
     module_id = "10116193"
