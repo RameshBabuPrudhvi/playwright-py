@@ -68,6 +68,10 @@ def pytest_runtest_teardown(item):
     """Runs after each test to upload results to qTest."""
     yield  # Run the test first
 
+    # Check if the test has the 'qtest' marker
+    if "qtest_ids" not in item.funcargs or not item.funcargs["qtest_ids"]:
+        return  # Skip teardown if no qTest marker
+
     qtest_ids = item.funcargs.get("qtest_ids", [])
     test_outcome = item.rep_call.outcome
 
