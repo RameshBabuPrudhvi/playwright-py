@@ -1,4 +1,5 @@
 # python
+import json
 import os
 from typing import Generator
 
@@ -14,6 +15,22 @@ REPORTS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "reports"))  # Store ou
 # Ensure necessary directories exist
 os.makedirs(f"{REPORTS_DIR}/videos", exist_ok=True)
 os.makedirs(f"{REPORTS_DIR}/screenshots", exist_ok=True)
+
+
+def pytest_addoption(parser):
+    parser.addoption("--env", action="store", default="qa", help="Choose environment: dev, qa, prod")
+
+
+@pytest.fixture(scope="session")
+def config(pytestconfig):
+    env = pytestconfig.getoption("env")  # Get environment from CLI or default
+    with open("../config/test_config.json", "r") as f:
+        configs = json.load(f)
+
+    if env not in configs:
+        raise ValueError(f"Environment '{env}' not found in test_config.json")
+
+    return configs[env]
 
 
 @pytest.fixture(scope='session')
@@ -82,11 +99,12 @@ def pytest_runtest_teardown(item):
     }
     status = status_mapping.get(test_outcome, "SKIP")
 
-    html_file_path = "../reports/TestReport.html"
+    html_file_path = os.path.join(REPORTS_DIR, "TestReport.html")
+
     base_url = "https://apitryout.qtestnet.com/api/v3"
     project_id = "101762"
     module_id = "10116193"
     api_token = "9bbf04fd-aed2-4e05-8428-7fc5ecff7bb8"
 
     reporter = QTestReporter(base_url, project_id, module_id, api_token)
-    reporter.upload_test_results(qtest_ids, status, html_file_path)
+    reporter.upload_multi_test_results(qtest_ids, status, html_file_path)

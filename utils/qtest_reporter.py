@@ -50,9 +50,9 @@ class QTestReporter:
                 if test_case.get("pid") == test_case_pid:
                     return test_case.get("id")
 
-            page += 1  # Move to the next page if not found
+            page += 1
 
-        return None  # If not found after iterating all pages
+        return None
 
     def create_test_cycle(self, cycle_name):
         """Creates a new test cycle in qTest."""
@@ -66,8 +66,8 @@ class QTestReporter:
 
     def create_test_suite(self, cycle_id, suite_name):
         """Creates a test suite inside a given test cycle."""
-        url = f"{self.base_url}/projects/{self.project_id}/test-suites"
-        payload = {"name": suite_name, "parent_id": cycle_id, "status": "In Progress"}
+        url = f"{self.base_url}/projects/{self.project_id}/test-suites?parentId={cycle_id}&parentType=test-cycle"
+        payload = {"name": suite_name, "description": "Automated test suite"}
 
         response = requests.post(url, json=payload, headers=self.headers)
         response.raise_for_status()
@@ -90,7 +90,7 @@ class QTestReporter:
 
         return response.json().get("id")
 
-    def upload_test_results(self, qtest_ids, status, report_path):
+    def upload_multi_test_results(self, qtest_ids, status, report_path):
         for qtest_id in qtest_ids:
             print(f"\nUploading Results for qTest ID: {qtest_id}")
             self.upload_test_result(qtest_id, status, report_path)
