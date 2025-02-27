@@ -50,3 +50,8 @@ Execute tests using pytest with the specified environment:
 ```bash 
 pytest --env=dev
 ```
+Execute tests using pytest with the specific tag:
+
+```bash 
+pytest --tags=smoke
+```

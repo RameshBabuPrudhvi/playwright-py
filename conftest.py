@@ -175,11 +175,11 @@ def page(browser, request):
 
 
 def pytest_collection_modifyitems(config, items):
-    qtest_id = config.getoption("--tags")
-    if qtest_id:
+    tags = config.getoption("--tags")
+    if tags:
         selected_items = []
         for item in items:
             marker = item.get_closest_marker("tags")
-            if marker and qtest_id in marker.args[0]:
+            if marker and tags in marker.args[0]:
                 selected_items.append(item)
         items[:] = selected_items
