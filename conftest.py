@@ -18,6 +18,9 @@ REPORTER = None
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 REPORTS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "reports"))
 CONFIG_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "config"))
+# Ensure necessary directories exist
+os.makedirs(f"{REPORTS_DIR}/videos", exist_ok=True)
+os.makedirs(f"{REPORTS_DIR}/screenshots", exist_ok=True)
 
 
 def pytest_addoption(parser):
