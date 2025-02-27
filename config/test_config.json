@@ -1,23 +1,26 @@
 {
-  "qa": {
-    "base_url": "https://qa.example.com",
-    "api_key": "qa_api_key",
-    "db_host": "qa-db.example.com",
-    "qtest": {
-      "url": "https://apitryout.qtestnet.com/api/v3",
-      "api_token": "9bbf04fd-aed2-4e05-8428-7fc5ecff7bb8",
-      "project_id": "101762",
-      "module_id": "10116193"
+  "qtest": {
+    "upload": false,
+    "url": "https://apitryout.qtestnet.com/api/v3",
+    "api_token": "9bbf04fd-aed2-4e05-8428-7fc5ecff7bb8",
+    "project_id": "101762",
+    "module_id": "10116193"
+  },
+  "environment": {
+    "qa": {
+      "api_url": "https://jsonplaceholder.typicode.com/posts/",
+      "api_key": "qa_api_key",
+      "db_host": "qa-db.example.com"
+    },
+    "dev": {
+      "base_url": "https://dev.example.com",
+      "api_key": "dev_api_key",
+      "db_host": "dev-db.example.com"
+    },
+    "prod": {
+      "base_url": "https://example.com",
+      "api_key": "prod_api_key",
+      "db_host": "prod-db.example.com"
     }
-  },
-  "dev": {
-    "base_url": "https://dev.example.com",
-    "api_key": "dev_api_key",
-    "db_host": "dev-db.example.com"
-  },
-  "prod": {
-    "base_url": "https://example.com",
-    "api_key": "prod_api_key",
-    "db_host": "prod-db.example.com"
   }
 }
