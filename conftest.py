@@ -25,6 +25,7 @@ os.makedirs(f"{REPORTS_DIR}/screenshots", exist_ok=True)
 
 def pytest_addoption(parser):
     parser.addoption("--env", action="store", default="qa", help="Choose environment: dev, qa, prod")
+    parser.addoption("--tags", action="store", default=None, help="Run tests with specific TAG")
 
 
 def pytest_configure(config):
@@ -171,3 +172,14 @@ def page(browser, request):
 
     page.close()
     context.close()
+
+
+def pytest_collection_modifyitems(config, items):
+    qtest_id = config.getoption("--tags")
+    if qtest_id:
+        selected_items = []
+        for item in items:
+            marker = item.get_closest_marker("tags")
+            if marker and qtest_id in marker.args[0]:
+                selected_items.append(item)
+        items[:] = selected_items
